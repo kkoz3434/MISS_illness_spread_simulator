@@ -1,3 +1,0 @@
-/media/kkoz34/HDD_kkoz34/8 semestr/MISS/cmake-build-debug/CMakeFiles/MISS.dir
-/media/kkoz34/HDD_kkoz34/8 semestr/MISS/cmake-build-debug/CMakeFiles/edit_cache.dir
-/media/kkoz34/HDD_kkoz34/8 semestr/MISS/cmake-build-debug/CMakeFiles/rebuild_cache.dir
