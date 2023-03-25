@@ -12,13 +12,10 @@ void Simulation::init() {
     static std::default_random_engine e;
     static std::uniform_real_distribution<> dis(0, MAP_SIZE);
     for (int i = 0; i < AGENTS_NO; ++i) {
-        float x = ((MAP_SIZE) * ((float)rand() / RAND_MAX));
-        float y = ((MAP_SIZE) * ((float)rand() / RAND_MAX));
-        float dx = ((AGENT_SPEED) * ((float)rand() / RAND_MAX));
-        float dy = ((AGENT_SPEED) * ((float)rand() / RAND_MAX));
-        Vector2f position = Vector2f(x,y);
-        Vector2f speed = Vector2f(dx, dy);
-        agents.emplace_back(position, speed, false);
+        agents.emplace_back();
+    }
+    for (int i = 0; i < SICK_AGENTS_NO; ++i) {
+        agents[i].isSick = true;
     }
 }
 
@@ -48,8 +45,15 @@ void Simulation::start() {
     }
 }
 
-void Simulation::update(Time time) {
 
+
+void Simulation::update(Time time) {
+    std::cout<<"DRAWING"<<std::endl;
+    for(Agent agent: agents) {
+        agent.move(time);
+    }
+    drawingEngine->draw(*renderWindow, agents);
+    renderWindow->display();
 }
 
 /**

@@ -9,7 +9,8 @@
 #define SIMULATION_HEIGHT 800.0
 #define SIMULATION_WIDTH 800.0
 #define AGENTS_NO 100
-#define AGENT_SPEED 5
+#define AGENT_SPEED 10
+#define SICK_AGENTS_NO 5
 
 #include <memory>
 #include "DrawingEngine.h"
