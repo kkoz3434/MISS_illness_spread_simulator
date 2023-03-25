@@ -25,9 +25,7 @@ void DrawingEngine::draw(RenderWindow &window, std::vector<Agent> agents) {
         shape.setOrigin(AGENT_SIZE, AGENT_SIZE);
         shape.setPosition((agent.position*MAP_SIZE/100.f));
         window.draw(shape);
-        std::cout<<"X";
     }
-    std::cout<<std::endl;
 }
 
 

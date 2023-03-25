@@ -9,8 +9,6 @@
 void Simulation::init() {
     this->drawingEngine->init(*renderWindow);
     renderWindow->display();
-    static std::default_random_engine e;
-    static std::uniform_real_distribution<> dis(0, MAP_SIZE);
     for (int i = 0; i < AGENTS_NO; ++i) {
         agents.emplace_back();
     }
@@ -48,9 +46,8 @@ void Simulation::start() {
 
 
 void Simulation::update(Time time) {
-    std::cout<<"DRAWING"<<std::endl;
-    for(Agent agent: agents) {
-        agent.move(time);
+    for(Agent &agent: agents) {
+        agent.update(time, agents,SIMULATION_WIDTH, SIMULATION_HEIGHT);
     }
     drawingEngine->draw(*renderWindow, agents);
     renderWindow->display();

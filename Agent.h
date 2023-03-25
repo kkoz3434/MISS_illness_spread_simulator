@@ -19,7 +19,15 @@ public:
     Agent();
     Agent(const sf::Vector2f &position, const sf::Vector2f &speed, bool isSick);
 
-    void move(sf::Time time);
+    void shuffleAgentBehaviour();
+
+    static float getRandom(float a, float b);
+    void update(sf::Time time, std::vector<Agent> &agents,float simulation_width, float simulation_height);
+
+
+private:
+    void wrapPosition(float simulation_width, float simulation_height);
+    void updateSickness(std::vector<Agent> &agents);
 };
 
 

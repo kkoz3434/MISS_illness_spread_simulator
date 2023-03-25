@@ -8,9 +8,9 @@
 
 #define SIMULATION_HEIGHT 800.0
 #define SIMULATION_WIDTH 800.0
-#define AGENTS_NO 100
-#define AGENT_SPEED 10
-#define SICK_AGENTS_NO 5
+#define AGENTS_NO 1
+#define AGENT_SPEED 200
+#define SICK_AGENTS_NO 1
 
 #include <memory>
 #include "DrawingEngine.h"
@@ -18,6 +18,7 @@
 #include <utility>
 #include <SFML/Window/Event.hpp>
 #include <iostream>
+#include <boost/random.hpp>
 
 class Simulation {
 public:
@@ -27,7 +28,6 @@ public:
     std::unique_ptr<DrawingEngine> drawingEngine;
     Clock clock;
     std::vector<Agent> agents;
-
 
     void init();
 

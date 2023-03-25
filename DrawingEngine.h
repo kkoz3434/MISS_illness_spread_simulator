@@ -4,7 +4,7 @@
 
 #ifndef MISS_DRAWINGENGINE_H
 #define MISS_DRAWINGENGINE_H
-#define AGENT_SIZE 10.
+#define AGENT_SIZE 5.
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
