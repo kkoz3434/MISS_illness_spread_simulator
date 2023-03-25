@@ -17,17 +17,20 @@ public:
     bool isSick;
 
     Agent();
+
     Agent(const sf::Vector2f &position, const sf::Vector2f &speed, bool isSick);
 
     void shuffleAgentBehaviour();
 
     static float getRandom(float a, float b);
-    void update(sf::Time time, std::vector<Agent> &agents,float simulation_width, float simulation_height);
+
+    void update(sf::Time time, std::vector<Agent> &agents, float simulation_width, float simulation_height);
 
 
 private:
     void wrapPosition(float simulation_width, float simulation_height);
-    void updateSickness(std::vector<Agent> &agents);
+
+    void updateSickness(const std::vector<Agent> &agents);
 };
 
 

@@ -4,7 +4,7 @@
 
 #ifndef MISS_DRAWINGENGINE_H
 #define MISS_DRAWINGENGINE_H
-#define AGENT_SIZE 5.
+
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -16,12 +16,13 @@ class DrawingEngine {
 public:
     DrawingEngine(float width, float height);
 
-    float simulationHeight{};
-    float simulationWidth{};
+    float simulationHeight;
+    float simulationWidth;
     RectangleShape background;
 
-    void init(RenderWindow& window);
-    static void draw(RenderWindow& window, std::vector<Agent> agents);
+    void init(RenderWindow &window);
+
+    static void draw(RenderWindow &window, std::vector<Agent> agents);
 };
 
 

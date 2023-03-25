@@ -44,18 +44,11 @@ void Simulation::start() {
 }
 
 
-
 void Simulation::update(Time time) {
-    for(Agent &agent: agents) {
-        agent.update(time, agents,SIMULATION_WIDTH, SIMULATION_HEIGHT);
+    for (Agent &agent: agents) {
+        agent.update(time, agents, SIMULATION_WIDTH, SIMULATION_HEIGHT);
     }
     drawingEngine->draw(*renderWindow, agents);
     renderWindow->display();
 }
-
-/**
- * klatka - obliczenie pozycji ludzi
- * przechowywanie czasu -> ile minęło od poprzedniej klatki o tyle przesuń chujka
- */
-
 

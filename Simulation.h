@@ -8,9 +8,11 @@
 
 #define SIMULATION_HEIGHT 800.0
 #define SIMULATION_WIDTH 800.0
-#define AGENTS_NO 1
-#define AGENT_SPEED 200
+#define AGENTS_NO 500
+#define AGENT_SPEED 100
 #define SICK_AGENTS_NO 1
+#define INFECTION_DISTANCE 2
+#define BEHAVIOUR_CONSISTENCY 0.98
 
 #include <memory>
 #include "DrawingEngine.h"
