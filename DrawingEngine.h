@@ -16,13 +16,15 @@ class DrawingEngine {
 public:
     DrawingEngine(float width, float height);
 
+    void init(RenderWindow &window);
+
+    void draw(RenderWindow &window, const std::vector<Agent> &agents);
+
+private:
     float simulationHeight;
     float simulationWidth;
     RectangleShape background;
 
-    void init(RenderWindow &window);
-
-    static void draw(RenderWindow &window, std::vector<Agent> agents);
 };
 
 

@@ -13,6 +13,6 @@ int main() {
     renderWindow->setVerticalSyncEnabled(true);
     Simulation simulation = Simulation(renderWindow);
     simulation.init();
-    simulation.start();
+    simulation.run();
     return 0;
 }

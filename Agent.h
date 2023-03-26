@@ -12,23 +12,24 @@
 
 class Agent {
 public:
+    Agent();
+
+    void update(sf::Time time, std::vector<Agent> &agents);
+
+    void makeSick();
+
+    inline bool checkSickness() const { return isSick; }
+
+    inline sf::Vector2f getPosition() const { return position; }
+
+private:
     sf::Vector2f position;
     sf::Vector2f speed;
     bool isSick;
-
-    Agent();
-
-    Agent(const sf::Vector2f &position, const sf::Vector2f &speed, bool isSick);
-
-    void shuffleAgentBehaviour();
+    void updatePosition(sf::Time &frameTime);
+    void updateAgentBehaviour();
 
     static float getRandom(float a, float b);
-
-    void update(sf::Time time, std::vector<Agent> &agents, float simulation_width, float simulation_height);
-
-
-private:
-    void wrapPosition(float simulation_width, float simulation_height);
 
     void updateSickness(const std::vector<Agent> &agents);
 };

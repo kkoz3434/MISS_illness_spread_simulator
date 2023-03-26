@@ -6,24 +6,26 @@
 #include "Simulation.h"
 
 
+Simulation::Simulation(std::shared_ptr<RenderWindow> window) : renderWindow(std::move(window)),
+                                                               drawingEngine(std::make_unique<DrawingEngine>(
+                                                                       SIMULATION_HEIGHT, SIMULATION_WIDTH)) {
+    agents.reserve(AGENTS_NO);
+}
+
 void Simulation::init() {
-    this->drawingEngine->init(*renderWindow);
+    drawingEngine->init(*renderWindow);
     renderWindow->display();
+
+    //initialize agents
     for (int i = 0; i < AGENTS_NO; ++i) {
         agents.emplace_back();
     }
     for (int i = 0; i < SICK_AGENTS_NO; ++i) {
-        agents[i].isSick = true;
+        agents[i].makeSick();
     }
 }
 
-Simulation::Simulation(std::shared_ptr<RenderWindow> window) : renderWindow(std::move(window)),
-                                                               drawingEngine(std::make_unique<DrawingEngine>(
-                                                                       SIMULATION_HEIGHT, SIMULATION_WIDTH)) {
-
-}
-
-void Simulation::start() {
+void Simulation::run() {
     Time startFrameTime = clock.getElapsedTime();
     Time endFrameTime = clock.getElapsedTime();
     Time frameTime;
@@ -39,14 +41,13 @@ void Simulation::start() {
         frameTime = endFrameTime - startFrameTime;
         startFrameTime = clock.getElapsedTime();
 
-        this->update(frameTime);
+        update(frameTime);
     }
 }
 
-
-void Simulation::update(Time time) {
+void Simulation::update(Time frameTime) {
     for (Agent &agent: agents) {
-        agent.update(time, agents, SIMULATION_WIDTH, SIMULATION_HEIGHT);
+        agent.update(frameTime, agents);
     }
     drawingEngine->draw(*renderWindow, agents);
     renderWindow->display();

@@ -8,11 +8,11 @@
 
 #define SIMULATION_HEIGHT 800.0
 #define SIMULATION_WIDTH 800.0
-#define AGENTS_NO 500
-#define AGENT_SPEED 100
+#define AGENTS_NO 600
+#define AGENT_SPEED 25
 #define SICK_AGENTS_NO 1
 #define INFECTION_DISTANCE 2
-#define BEHAVIOUR_CONSISTENCY 0.98
+#define BEHAVIOUR_CONSISTENCY 0.7
 
 #include <memory>
 #include "DrawingEngine.h"
@@ -26,16 +26,17 @@ class Simulation {
 public:
     explicit Simulation(std::shared_ptr<RenderWindow> window);
 
+    void init();
+
+    void run();
+
+private:
     std::shared_ptr<RenderWindow> renderWindow;
     std::unique_ptr<DrawingEngine> drawingEngine;
     Clock clock;
     std::vector<Agent> agents;
 
-    void init();
-
-    void start();
-
-    void update(Time time);
+    void update(Time frameTime);
 };
 
 
