@@ -21,7 +21,7 @@ void DrawingEngine::draw(RenderWindow &window, const std::vector<Agent> &agents)
     window.clear(Color(255, 255, 255));
     for (const Agent &agent: agents) {
         sf::CircleShape shape = CircleShape(INFECTION_DISTANCE);
-        if (agent.checkSickness()) {
+        if (agent.checkIsSick()) {
             shape.setFillColor(Color(255, 0, 0, 255));
         } else {
             if (agent.checkAfterRecovery()) {

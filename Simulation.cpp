@@ -3,12 +3,15 @@
 //
 
 #include <random>
+#include <utility>
 #include "Simulation.h"
 
-
-Simulation::Simulation(std::shared_ptr<RenderWindow> window) : renderWindow(std::move(window)),
-                                                               drawingEngine(std::make_unique<DrawingEngine>(
-                                                                       SIMULATION_HEIGHT, SIMULATION_WIDTH)) {
+Simulation::Simulation(std::shared_ptr<RenderWindow> window, std::shared_ptr<GraphDrawer> graphDrawer,
+                       std::shared_ptr<RenderWindow> graphWindow) : renderWindow(std::move(window)),
+                                                                    drawingEngine(std::make_unique<DrawingEngine>(
+                                                                            SIMULATION_HEIGHT, SIMULATION_WIDTH)),
+                                                                    graphDrawer(std::move(graphDrawer)),
+                                                                    graphWindow(std::move(graphWindow)) {
     agents.reserve(AGENTS_NO);
 }
 
@@ -29,10 +32,16 @@ void Simulation::run() {
     Time startFrameTime = clock.getElapsedTime();
     Time endFrameTime = clock.getElapsedTime();
     Time frameTime;
-    while (renderWindow->isOpen()) {
+    int counter = 0;
+    while (renderWindow->isOpen() && graphWindow->isOpen()) {
         renderWindow->clear();
         Event event{};
         while (renderWindow->pollEvent(event)) {
+            if (event.type == Event::Closed) {
+                renderWindow->close();
+            }
+        }
+        while(graphWindow->pollEvent(event)){
             if (event.type == Event::Closed) {
                 renderWindow->close();
             }
@@ -42,6 +51,11 @@ void Simulation::run() {
         startFrameTime = clock.getElapsedTime();
 
         update(frameTime);
+        counter++;
+        if (counter % 1 == 0) {
+           // graphDrawer->updateGraph(graphWindow,agents);
+            //counter = 1;
+        }
     }
 }
 

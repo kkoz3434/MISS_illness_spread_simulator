@@ -18,7 +18,7 @@ public:
 
     void makeSick();
 
-    inline bool checkSickness() const { return isSick; }
+    inline bool checkIsSick() const { return isSick; }
 
     inline bool checkIsAlive() const { return isAlive; }
 

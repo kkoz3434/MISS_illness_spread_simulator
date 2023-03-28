@@ -8,6 +8,8 @@
 
 #define SIMULATION_HEIGHT 800.0
 #define SIMULATION_WIDTH 800.0
+#define GRAPH_HEIGHT 300
+#define GRAPH_WIDTH 600
 #define AGENTS_NO 1000
 #define AGENT_SPEED 100
 #define SICK_AGENTS_NO 1
@@ -15,13 +17,14 @@
 #define BEHAVIOUR_CONSISTENCY 0.7
 #define INFECTION_CHANCE 0.8
 #define INFECTION_TIME 1000
-#define DEATH_RATE 0.1
-#define DEATH_RATE_AFTER_RECOVERY 0.01
+#define DEATH_RATE 0.3
+#define DEATH_RATE_AFTER_RECOVERY 0.15
 
 
 #include <memory>
 #include "DrawingEngine.h"
 #include "Agent.h"
+#include "GraphDrawer.h"
 #include <utility>
 #include <SFML/Window/Event.hpp>
 #include <iostream>
@@ -29,7 +32,8 @@
 
 class Simulation {
 public:
-    explicit Simulation(std::shared_ptr<RenderWindow> window);
+    explicit Simulation(std::shared_ptr<RenderWindow> window, std::shared_ptr<GraphDrawer> graphDrawer,
+                        std::shared_ptr<RenderWindow> graphWindow);
 
     void init();
 
@@ -37,9 +41,11 @@ public:
 
 private:
     std::shared_ptr<RenderWindow> renderWindow;
+    std::shared_ptr<RenderWindow> graphWindow;
     std::unique_ptr<DrawingEngine> drawingEngine;
     Clock clock;
     std::vector<Agent> agents;
+    std::shared_ptr<GraphDrawer> graphDrawer;
 
     void update(Time frameTime);
 };
