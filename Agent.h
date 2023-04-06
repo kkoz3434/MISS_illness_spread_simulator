@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Time.hpp>
+#include <list>
 
 #define MAP_SIZE 100.f
 
@@ -14,7 +15,7 @@ class Agent {
 public:
     Agent();
 
-    void update(sf::Time time, std::vector<Agent> &agents);
+    void update(sf::Time time, std::list<Agent> &agents);
 
     void makeSick();
 
@@ -41,7 +42,7 @@ private:
 
     static float getRandom(float a, float b);
 
-    void updateSickness(const std::vector<Agent> &agents);
+    void updateSickness(const std::list<Agent> &agents);
 };
 
 

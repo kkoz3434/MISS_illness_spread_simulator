@@ -4,10 +4,11 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include "GraphDrawer.h"
 #include "Simulation.h"
 
-GraphDrawer::GraphDrawer(){
+GraphDrawer::GraphDrawer() : dots(GRAPH_WIDTH) {
     healthyAgents.push_back(AGENTS_NO);
     infectedAgents.push_back(SICK_AGENTS_NO);
     deadAgents.push_back(0);
@@ -15,7 +16,51 @@ GraphDrawer::GraphDrawer(){
     agentsAmount = AGENTS_NO;
 }
 
-void GraphDrawer::updateGraph(std::shared_ptr<RenderWindow> renderWindow, std::vector<Agent> &agents) {
+void drawAxis(std::shared_ptr<RenderWindow> renderWindow, int xSpacing, int ySpacing, int windowHeight, int windowWidth){
+    sf::VertexArray lineX(sf::LineStrip, 2);
+    lineX[0] = sf::Vector2f(xSpacing, windowHeight + ySpacing / 4);
+    lineX[1] = sf::Vector2f (windowWidth, windowHeight + ySpacing / 4);
+    lineX[0].color = sf::Color::Black;
+    lineX[1].color = sf::Color::Black;
+
+    sf::VertexArray lineY(sf::LineStrip, 2);
+    lineY[0] = sf::Vector2f(xSpacing, ySpacing/4);
+    lineY[1] = sf::Vector2f (xSpacing, windowHeight + ySpacing/4);
+    lineY[0].color = sf::Color::Black;
+    lineY[1].color = sf::Color::Black;
+
+    sf::Text text;
+    text.setFillColor(sf::Color::Black);
+    text.setCharacterSize(20);
+    text.setPosition(xSpacing/2,ySpacing/2);
+    text.setString("100%");
+    text.setFont(Font());
+
+    renderWindow->draw(text);
+    renderWindow->draw(lineX);
+    renderWindow->draw(lineY);
+}
+
+
+sf::CircleShape makeDot(sf::Color color, float value, float maxX, float maxY, int ySpacing) {
+    CircleShape circle = CircleShape(1);
+    circle.setPosition(Vector2f(maxX, ySpacing / 4 + abs((maxY * (1 - (value * 1.0 / AGENTS_NO))))));
+    circle.setFillColor(color);
+    return circle;
+}
+
+void updateDots(std::vector<sf::CircleShape> &dots, int xSpacing) {
+    std::vector<CircleShape> toSave;
+    for (CircleShape &circle: dots) {
+        if (circle.getPosition().x > xSpacing) {
+            circle.setPosition(circle.getPosition().x - 1, circle.getPosition().y);
+            toSave.push_back(circle);
+        }
+    }
+    dots = toSave;
+}
+
+void GraphDrawer::updateGraph(std::shared_ptr<RenderWindow> renderWindow, std::list<Agent> &agents) {
     float healthy = 0;
     float infected = 0;
     float dead = 0;
@@ -23,68 +68,33 @@ void GraphDrawer::updateGraph(std::shared_ptr<RenderWindow> renderWindow, std::v
     for (const Agent &agent: agents) {
         if (!agent.checkIsAlive()) {
             dead++;
-            //std::cout<<"DEAD"<<std::endl;
         } else if (!agent.checkIsSick() && agent.checkAfterRecovery()) {
             healed++;
-           // std::cout<<"healed"<<std::endl;
         } else if (!agent.checkIsSick()) {
             healthy++;
         } else if (agent.checkIsSick()) {
             infected++;
-          //  std::cout<<"infected"<<std::endl;
         }
     }
 
-    healthyAgents.push_back(healthy);
-    infectedAgents.push_back(infected);
-    deadAgents.push_back(dead);
-    healedAgents.push_back(healed);
-    //std::cout<<healedAgents.size()<<std::endl;
-
-    drawGraph(renderWindow);
-}
-
-void drawLine(sf::Image &graph, const std::vector<float>& vector, float yMax, float start, sf::Color color) {
-    float currentX = start;
-    for (const float value: vector) {
-        std::cout<<(unsigned int) abs(currentX)<<" "<<(unsigned int) abs((yMax * (1-(value*1.0 / AGENTS_NO))))<<std::endl;
-        graph.setPixel((unsigned int) abs(currentX), (unsigned int) abs((yMax * (1-(value*1.0 / AGENTS_NO)))), color);
-        currentX++;
-    }
-    std::cout<<"XD"<<std::endl;
-}
-
-std::vector<float> getLastN(std::vector<float> &vector, int N) {
-    if(vector.size() > N){
-        std::vector<float> result(vector.end() - N, vector.end());
-        return (result);
-    }
-    return vector;
-}
-
-void GraphDrawer::drawGraph(std::shared_ptr<RenderWindow> &graphWindow) {
-    graphWindow->clear(Color(255, 255, 255));
+    renderWindow->clear(Color(255, 255, 255));
     float graphWidth = GRAPH_WIDTH - xSpacing;
     float graphHeight = GRAPH_HEIGHT - ySpacing;
-    float measurementsAmount =  fmod(healedAgents.size(), graphWidth);
-    sf::Image graph;
-    graph.create((unsigned int) graphWidth, (unsigned int)graphHeight, Color(255, 255, 255));
-    float startX = (graphWidth) -  measurementsAmount;
-    drawLine(graph, getLastN(healthyAgents, (int) measurementsAmount), graphHeight, startX, sf::Color(0, 255, 0));
-    drawLine(graph, getLastN(infectedAgents, (int) measurementsAmount), graphHeight, startX, sf::Color(255, 0, 0));
-    // todo: dowiedzieć sie czemu nie działa tak jak ma działać
-    //drawLine(graph, getLastN(deadAgents, (int) measurementsAmount), graphHeight, startX, sf::Color(0, 0, 0));
-    //drawLine(graph, getLastN(healedAgents, (int) measurementsAmount), graphHeight, startX, sf::Color(0, 0, 255));
 
-    sf::Texture texture;
-    texture.loadFromImage(graph);
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.setPosition((float)(xSpacing*1./2.f),(float) (ySpacing*1./2));
+    dots.push_back(makeDot(Color(0, 255, 0, 120), healthy, graphWidth, graphHeight, ySpacing));
+    dots.push_back(makeDot(Color(255, 0, 0, 120), infected, graphWidth, graphHeight, ySpacing));
+    dots.push_back(makeDot(Color(0, 0, 255, 120), healed, graphWidth, graphHeight, ySpacing));
+    dots.push_back(makeDot(Color(0, 0, 0, 120), dead, graphWidth, graphHeight, ySpacing));
 
-    graphWindow->draw(sprite);
-    graphWindow->display();
+    updateDots(dots, xSpacing);
+    for (CircleShape &dot: dots) {
+        renderWindow->draw(dot);
+    }
+    drawAxis(renderWindow, xSpacing, ySpacing,  graphHeight, graphWidth);
+    renderWindow->display();
 }
+
+
 
 
 

@@ -9,16 +9,16 @@
 #define SIMULATION_HEIGHT 800.0
 #define SIMULATION_WIDTH 800.0
 #define GRAPH_HEIGHT 300
-#define GRAPH_WIDTH 600
+#define GRAPH_WIDTH 500
 #define AGENTS_NO 1000
 #define AGENT_SPEED 100
 #define SICK_AGENTS_NO 1
 #define INFECTION_DISTANCE 2
 #define BEHAVIOUR_CONSISTENCY 0.7
 #define INFECTION_CHANCE 0.8
-#define INFECTION_TIME 1000
-#define DEATH_RATE 0.3
-#define DEATH_RATE_AFTER_RECOVERY 0.15
+#define INFECTION_TIME 10000
+#define DEATH_RATE 0.1
+#define DEATH_RATE_AFTER_RECOVERY 0.05
 
 
 #include <memory>
@@ -44,7 +44,7 @@ private:
     std::shared_ptr<RenderWindow> graphWindow;
     std::unique_ptr<DrawingEngine> drawingEngine;
     Clock clock;
-    std::vector<Agent> agents;
+    std::list<Agent> agents;
     std::shared_ptr<GraphDrawer> graphDrawer;
 
     void update(Time frameTime);

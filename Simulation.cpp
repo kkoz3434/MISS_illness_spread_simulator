@@ -12,7 +12,6 @@ Simulation::Simulation(std::shared_ptr<RenderWindow> window, std::shared_ptr<Gra
                                                                             SIMULATION_HEIGHT, SIMULATION_WIDTH)),
                                                                     graphDrawer(std::move(graphDrawer)),
                                                                     graphWindow(std::move(graphWindow)) {
-    agents.reserve(AGENTS_NO);
 }
 
 void Simulation::init() {
@@ -23,8 +22,11 @@ void Simulation::init() {
     for (int i = 0; i < AGENTS_NO; ++i) {
         agents.emplace_back();
     }
+
+    auto iterator = agents.begin();
     for (int i = 0; i < SICK_AGENTS_NO; ++i) {
-        agents[i].makeSick();
+        iterator->makeSick();
+        iterator++;
     }
 }
 
@@ -53,8 +55,8 @@ void Simulation::run() {
         update(frameTime);
         counter++;
         if (counter % 1 == 0) {
-           // graphDrawer->updateGraph(graphWindow,agents);
-            //counter = 1;
+            graphDrawer->updateGraph(graphWindow, agents);
+            counter = 1;
         }
     }
 }

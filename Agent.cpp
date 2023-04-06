@@ -20,7 +20,7 @@ Agent::Agent() {
     this->afterRecovery = false;
 }
 
-void Agent::update(sf::Time time, std::vector<Agent> &agents) {
+void Agent::update(sf::Time time, std::list<Agent> &agents) {
     updatePosition(time);
     updateSickness(agents);
     updateAgentBehaviour();
@@ -50,7 +50,7 @@ void Agent::updatePosition(sf::Time &frameTime) {
     }
 }
 
-void Agent::updateSickness(const std::vector<Agent> &agents) {
+void Agent::updateSickness(const std::list<Agent> &agents) {
     if (isSick) {
         infectionTime++;
         if(infectionTime > INFECTION_TIME && isAlive){
