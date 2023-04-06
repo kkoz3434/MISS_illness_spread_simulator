@@ -34,6 +34,7 @@ private:
     bool isAlive;
     bool afterRecovery;
     long infectionTime;
+    long infectionElapsedTime;
     float deathChance;
 
     void updatePosition(sf::Time &frameTime);

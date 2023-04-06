@@ -10,11 +10,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <list>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include "Agent.h"
 
 class GraphDrawer {
 public:
-    void updateGraph(std::shared_ptr<sf::RenderWindow> graphWindow,std::list<Agent> &agents);
+    void updateGraph(std::shared_ptr<sf::RenderWindow> graphWindow, float healthy, float infected, float dead, float healed);
 
     explicit GraphDrawer();
 private:
@@ -29,7 +30,8 @@ private:
     int xSpacing = 50;
     int ySpacing = 50;
 
-    void drawGraph(std::shared_ptr<sf::RenderWindow> &graphWindow);
+    sf::Font font;
+
 
 
 };

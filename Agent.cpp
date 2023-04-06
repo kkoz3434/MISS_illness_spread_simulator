@@ -16,6 +16,7 @@ Agent::Agent() {
     this->isSick = false;
     this->isAlive = true;
     this->infectionTime = 0;
+    this->infectionElapsedTime = 0;
     this->deathChance = DEATH_RATE;
     this->afterRecovery = false;
 }
@@ -27,7 +28,7 @@ void Agent::update(sf::Time time, std::list<Agent> &agents) {
 }
 
 void Agent::updatePosition(sf::Time &frameTime) {
-    if(isAlive) {
+    if (isAlive) {
         position += speed * frameTime.asSeconds();
         float x = position.x;
         if (x > SIMULATION_WIDTH) {
@@ -52,26 +53,25 @@ void Agent::updatePosition(sf::Time &frameTime) {
 
 void Agent::updateSickness(const std::list<Agent> &agents) {
     if (isSick) {
-        infectionTime++;
-        if(infectionTime > INFECTION_TIME && isAlive){
-            if(getRandom(0,1)<deathChance){
+        infectionElapsedTime++;
+        if (infectionElapsedTime > infectionTime && isAlive) {
+            if (getRandom(0, 1) < deathChance) {
                 isAlive = false;
-                speed = Vector2f(0,0);
+                speed = Vector2f(0, 0);
             } else {
                 isSick = false;
                 afterRecovery = true;
                 deathChance = DEATH_RATE_AFTER_RECOVERY;
             }
         }
-    }
-    else {
-        //todo dodać różne strategie zarażania, coś jak command -> command.willInfect(agent1, agent2), command drugim parametrem
+    } else {
         for (const Agent &agent: agents) {
             Vector2f a = agent.position - position;
             float distanceSquared = a.x * a.x + a.y * a.y;
             if (distanceSquared < pow(INFECTION_DISTANCE, 2) && agent.isSick && agent.isAlive) {
                 if (getRandom(0, 1) < INFECTION_CHANCE) {
                     isSick = true;
+                    infectionTime = (long) getRandom(INFECTION_TIME_MIN, INFECTION_TIME_MAX);
                     return;
                 }
             }
@@ -89,6 +89,7 @@ void Agent::updateAgentBehaviour() {
 
 void Agent::makeSick() {
     isSick = true;
+    infectionTime = (long) getRandom(INFECTION_TIME_MIN, INFECTION_TIME_MAX);
 }
 
 float Agent::getRandom(float a, float b) {

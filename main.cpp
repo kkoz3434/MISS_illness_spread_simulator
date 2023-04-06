@@ -15,10 +15,17 @@ int main() {
     std::shared_ptr<RenderWindow> graphWindow = std::make_shared<RenderWindow>(VideoMode(GRAPH_WIDTH, GRAPH_HEIGHT),
                                                                                TITLE);
     graphWindow->setVerticalSyncEnabled(true);
+
     std::shared_ptr<GraphDrawer> graphDrawer = std::make_shared<GraphDrawer>();
 
+    std::shared_ptr<RenderWindow> infoWindow = std::make_shared<RenderWindow>(VideoMode(INFO_WIDTH, INFO_HEIGHT),
+                                                                               TITLE);
+    infoWindow->setVerticalSyncEnabled(true);
 
-    Simulation simulation = Simulation(renderWindow, graphDrawer, graphWindow);
+    std::shared_ptr<StatsDrawer> statsDrawer = std::make_shared<StatsDrawer>();
+
+
+    Simulation simulation = Simulation(renderWindow, graphDrawer, graphWindow, infoWindow, statsDrawer);
     simulation.init();
     simulation.run();
     return 0;
