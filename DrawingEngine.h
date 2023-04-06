@@ -18,7 +18,7 @@ public:
 
     void init(RenderWindow &window);
 
-    void draw(RenderWindow &window, const std::vector<Agent> &agents);
+    void draw(RenderWindow &window, const std::list<Agent> &agents);
 
 private:
     float simulationHeight;

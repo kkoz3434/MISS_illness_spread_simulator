@@ -17,15 +17,23 @@ DrawingEngine::DrawingEngine(float width, float height) : simulationHeight(heigh
     background.setPosition(0, 0);
 }
 
-void DrawingEngine::draw(RenderWindow &window, const std::vector<Agent> &agents) {
+void DrawingEngine::draw(RenderWindow &window, const std::list<Agent> &agents) {
     window.clear(Color(255, 255, 255));
     for (const Agent &agent: agents) {
         sf::CircleShape shape = CircleShape(INFECTION_DISTANCE);
-        if (agent.checkSickness()) {
-            shape.setFillColor(Color(255, 0, 0, 255)); //todo: extract
+        if (agent.checkIsSick()) {
+            shape.setFillColor(Color(255, 0, 0, 255));
         } else {
-            shape.setFillColor(Color(0, 255, 0, 255));
+            if (agent.checkAfterRecovery()) {
+                shape.setFillColor(Color(0, 0, 255, 255));
+            } else {
+                shape.setFillColor(Color(0, 255, 0, 255));
+            }
         }
+        if (!agent.checkIsAlive()) {
+            shape.setFillColor(Color(0, 0, 0, 255));
+        }
+
         shape.setOrigin(INFECTION_DISTANCE, INFECTION_DISTANCE);
         shape.setPosition((agent.getPosition() * MAP_SIZE / 100.f));
         window.draw(shape);

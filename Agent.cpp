@@ -14,50 +14,73 @@ Agent::Agent() {
     this->position = Vector2f(x, y);
     this->speed = Vector2f(dx, dy);
     this->isSick = false;
+    this->isAlive = true;
+    this->infectionTime = 0;
+    this->infectionElapsedTime = 0;
+    this->deathChance = DEATH_RATE;
+    this->afterRecovery = false;
 }
 
-void Agent::update(sf::Time time, std::vector<Agent> &agents) {
+void Agent::update(sf::Time time, std::list<Agent> &agents) {
     updatePosition(time);
     updateSickness(agents);
     updateAgentBehaviour();
 }
 
 void Agent::updatePosition(sf::Time &frameTime) {
-    position += speed * frameTime.asSeconds();
-    float x = position.x;
-    if (x > SIMULATION_WIDTH) {
-        position.x -= abs(x - SIMULATION_WIDTH);
-        speed.x = -1 * speed.x;
-    }
-    if (x < 0) {
-        position.x += abs(x);
-        speed.x = -1 * speed.x;
-    }
-    float y = position.y;
-    if (y > SIMULATION_HEIGHT) {
-        position.y -= abs(y - SIMULATION_HEIGHT);
-        speed.y = -1 * speed.y;
-    }
-    if (y < 0) {
-        position.y += abs(y);
-        speed.y = -1 * speed.y;
+    if (isAlive) {
+        position += speed * frameTime.asSeconds();
+        float x = position.x;
+        if (x > SIMULATION_WIDTH) {
+            position.x -= abs(x - SIMULATION_WIDTH);
+            speed.x = -1 * speed.x;
+        }
+        if (x < 0) {
+            position.x += abs(x);
+            speed.x = -1 * speed.x;
+        }
+        float y = position.y;
+        if (y > SIMULATION_HEIGHT) {
+            position.y -= abs(y - SIMULATION_HEIGHT);
+            speed.y = -1 * speed.y;
+        }
+        if (y < 0) {
+            position.y += abs(y);
+            speed.y = -1 * speed.y;
+        }
     }
 }
 
-void Agent::updateSickness(const std::vector<Agent> &agents) {
-    //todo dodać różne strategie zarażania, coś jak command -> command.willInfect(agent1, agent2), command drugim parametrem
-    for (const Agent &agent: agents) {
-        Vector2f a = agent.position - position;
-        float distanceSquared = a.x * a.x + a.y * a.y;
-        if (distanceSquared < pow(INFECTION_DISTANCE, 2) && agent.isSick) {
-            isSick = true;
-            return;
+void Agent::updateSickness(const std::list<Agent> &agents) {
+    if (isSick) {
+        infectionElapsedTime++;
+        if (infectionElapsedTime > infectionTime && isAlive) {
+            if (getRandom(0, 1) < deathChance) {
+                isAlive = false;
+                speed = Vector2f(0, 0);
+            } else {
+                isSick = false;
+                afterRecovery = true;
+                deathChance = DEATH_RATE_AFTER_RECOVERY;
+            }
+        }
+    } else {
+        for (const Agent &agent: agents) {
+            Vector2f a = agent.position - position;
+            float distanceSquared = a.x * a.x + a.y * a.y;
+            if (distanceSquared < pow(INFECTION_DISTANCE, 2) && agent.isSick && agent.isAlive) {
+                if (getRandom(0, 1) < INFECTION_CHANCE) {
+                    isSick = true;
+                    infectionTime = (long) getRandom(INFECTION_TIME_MIN, INFECTION_TIME_MAX);
+                    return;
+                }
+            }
         }
     }
 }
 
 void Agent::updateAgentBehaviour() {
-    if (getRandom(0, 1) > BEHAVIOUR_CONSISTENCY) {
+    if (isAlive && getRandom(0, 1) > BEHAVIOUR_CONSISTENCY) {
         float dx = Agent::getRandom(-AGENT_SPEED, AGENT_SPEED);
         float dy = Agent::getRandom(-AGENT_SPEED, AGENT_SPEED);
         speed = Vector2f(dx, dy);
@@ -66,6 +89,7 @@ void Agent::updateAgentBehaviour() {
 
 void Agent::makeSick() {
     isSick = true;
+    infectionTime = (long) getRandom(INFECTION_TIME_MIN, INFECTION_TIME_MAX);
 }
 
 float Agent::getRandom(float a, float b) {
@@ -75,5 +99,7 @@ float Agent::getRandom(float a, float b) {
     return distribution(gen);
     // return ((b - a) * ((float)rand() / RAND_MAX)) + a; //bad alternative
 }
+
+
 
 
