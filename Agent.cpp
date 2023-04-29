@@ -105,8 +105,8 @@ void Agent::updateSickness(const std::vector<Agent> &agents) {
 
 void Agent::updateAgentBehaviour() {
     if (isAlive && getRandomInt(0, 1) > BEHAVIOUR_CONSISTENCY) {
-        float dx = Agent::getRandomInt(-AGENT_SPEED, AGENT_SPEED);
-        float dy = Agent::getRandomInt(-AGENT_SPEED, AGENT_SPEED);
+        float dx = Agent::getRandomFloat(-AGENT_SPEED, AGENT_SPEED);
+        float dy = Agent::getRandomFloat(-AGENT_SPEED, AGENT_SPEED);
         speed = Vector2f(dx, dy);
     }
 }

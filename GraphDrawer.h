@@ -31,9 +31,6 @@ private:
     int ySpacing = 50;
 
     sf::Font font;
-
-
-
 };
 
 
