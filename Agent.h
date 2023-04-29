@@ -15,9 +15,11 @@ class Agent {
 public:
     Agent();
 
-    void update(sf::Time time, std::list<Agent> &agents);
+    void update(sf::Time time, std::vector<Agent> &agents);
 
     void makeSick();
+
+    void makeFriends();
 
     inline bool checkIsSick() const { return isSick; }
 
@@ -36,14 +38,20 @@ private:
     long infectionTime;
     long infectionElapsedTime;
     float deathChance;
+    std::vector<int> friends;
+    long lastMeeting;
 
     void updatePosition(sf::Time &frameTime);
 
     void updateAgentBehaviour();
 
-    static float getRandom(float a, float b);
+    static float getRandomFloat(float a, float b);
 
-    void updateSickness(const std::list<Agent> &agents);
+    void updateSickness(const std::vector<Agent> &agents);
+
+    static int getRandomInt(int a, int b);
+
+
 };
 
 

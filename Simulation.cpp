@@ -25,6 +25,10 @@ void Simulation::init() {
         agents.emplace_back();
     }
 
+    for (Agent& agent : agents) {
+        agent.makeFriends();
+    }
+
     auto iterator = agents.begin();
     for (int i = 0; i < SICK_AGENTS_NO; ++i) {
         iterator->makeSick();

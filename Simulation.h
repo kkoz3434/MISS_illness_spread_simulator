@@ -15,11 +15,14 @@
 #define INFO_WIDTH 400
 #define INFO_FONT_SIZE 16
 #define AGENTS_NO 1000
+#define AGENTS_FRIENDS_NO 10
 #define AGENT_SPEED 100
+#define AGENT_MEETING_PERIOD 200
+#define AGENT_MEETING_INFECTION_CHANCE 0.2
 #define SICK_AGENTS_NO 10
 #define INFECTION_DISTANCE 2
 #define BEHAVIOUR_CONSISTENCY 0.7
-#define INFECTION_CHANCE 0.9
+#define INFECTION_CHANCE 0.1
 #define INFECTION_TIME_MAX 3000
 #define INFECTION_TIME_MIN 200
 #define DEATH_RATE 0.1
@@ -51,7 +54,7 @@ private:
     std::shared_ptr<RenderWindow> infoWindow;
     std::unique_ptr<DrawingEngine> drawingEngine;
     Clock clock;
-    std::list<Agent> agents;
+    std::vector<Agent> agents;
     std::shared_ptr<GraphDrawer> graphDrawer;
     std::shared_ptr<StatsDrawer> statsDrawer;
 

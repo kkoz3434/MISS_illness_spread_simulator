@@ -17,7 +17,7 @@ DrawingEngine::DrawingEngine(float width, float height) : simulationHeight(heigh
     background.setPosition(0, 0);
 }
 
-void DrawingEngine::draw(RenderWindow &window, const std::list<Agent> &agents) {
+void DrawingEngine::draw(RenderWindow &window, const std::vector<Agent> &agents) {
     window.clear(Color(255, 255, 255));
     for (const Agent &agent: agents) {
         sf::CircleShape shape = CircleShape(INFECTION_DISTANCE);
